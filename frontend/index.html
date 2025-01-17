@@ -53,7 +53,7 @@
         document.getElementById("format-button").addEventListener("click", async () => {
             const inputText = document.getElementById("input-text").value;
 
-            const response = await fetch("0.0.0.0:10000/format", {
+            const response = await fetch("http://0.0.0.0:10000/format", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
