@@ -18,6 +18,10 @@ def format_transcript(text):
         if text_part:
             formatted_text.append(text_part) 
     return ' '.join(formatted_text).strip()
+    
+@app.route('/')
+def home():
+    return "Flask app is running!"
 
 @app.route('/format', methods=['POST'])
 def format_text():
@@ -35,7 +39,7 @@ def format_text():
 
 
 if __name__ == "__main__":
-    app.run(debug=True, host="0.0.0.0", port=5000)
+    app.run(debug=True, host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
 
 
 
