@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transcript Formatter</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 10px;
+        }
+        textarea {
+            width: 100%;
+            height: 200px;
+            margin-bottom: 10px;
+        }
+        button {
+            padding: 10px 15px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .output-box {
+            background-color: #f4f4f4;
+            border: 1px solid #ccc;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Transcript Formatter</h1>
+
+    <div>
+        <label for="input-text">Paste the transcript (with line numbers and time codes):</label>
+        <textarea id="input-text"></textarea>
+    </div>
+
+    <div>
+        <button id="format-button">Format Transcript</button>
+    </div>
+
+    <div>
+        <label for="output-text">Formatted Transcript:</label>
+        <textarea id="output-text" class="output-box" readonly></textarea>
+    </div>
+
+    <script>
+        document.getElementById("format-button").addEventListener("click", async () => {
+            const inputText = document.getElementById("input-text").value;
+
+            const response = await fetch("http://127.0.0.1:5000/format", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ transcript: inputText })
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                document.getElementById("output-text").value = data.formatted_transcript;
+            } else {
+                console.log(formatted_transcript)
+                alert("Error formatting transcript");
+            }
+        });
+      
+    </script>
+</body>
+</html>
