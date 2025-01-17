@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify
 import re
+import os
 from flask_cors import CORS
 
 app = Flask(__name__)
@@ -31,8 +32,11 @@ def format_text():
     formatted_transcript = format_transcript(transcript)
     return jsonify({'formatted_transcript': formatted_transcript})
 
-if __name__ == '__main__':
-    app.run(debug=True)
+
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
+
 
 
 
