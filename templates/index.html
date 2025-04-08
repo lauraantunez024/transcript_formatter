@@ -2,29 +2,58 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="5859884b0ea8154ad405a7e267fcf1bcbb8637b9" content="5859884b0ea8154ad405a7e267fcf1bcbb8637b9" />
-    <meta name="referrer" content="no-referrer-when-downgrade" />
-    <title>Transcript Formatter</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Transcript Formatter</title>
+    <meta name="description" content="Free online tool to format transcripts by removing line numbers and timestamps. Perfect for cleaning up Premiere Pro transcripts.">
+    <meta name="keywords" content="transcript formatter, premiere pro transcript, clean transcript, remove timestamps, remove line numbers">
+    <meta name="author" content="Transcript Formatter">
+    <meta name="robots" content="index, follow">
+    <title>Transcript Formatter - Clean Up Your Transcripts Online</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            margin: 20px;
-            padding: 10px;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            color: #333;
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .description {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 30px;
+        }
+        .example {
+            background-color: #e9ecef;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+            font-family: monospace;
+            white-space: pre-wrap;
         }
         textarea {
             width: 100%;
             height: 200px;
-            margin-bottom: 10px;
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            resize: vertical;
         }
         button {
-            padding: 10px 15px;
+            padding: 12px 20px;
             background-color: #007bff;
             color: white;
             border: none;
+            border-radius: 4px;
             cursor: pointer;
-      
+            font-size: 16px;
+            transition: background-color 0.3s;
         }
         button:hover {
             background-color: #0056b3;
@@ -33,84 +62,89 @@
             background-color: #f4f4f4;
             border: 1px solid #ccc;
             padding: 10px;
+            border-radius: 4px;
         }
-
-    
+        .instructions {
+            margin: 30px 0;
+        }
+        .instructions h2 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+        .instructions ol {
+            padding-left: 20px;
+        }
+        .instructions li {
+            margin-bottom: 10px;
+        }
     </style>
 </head>
 <body>
-    <h1>Transcript Formatter</h1>
+    <header>
+        <h1>Transcript Formatter</h1>
+    </header>
 
-    <div>
-        <label for="input-text">Paste the transcript (with line numbers and time codes):</label>
-        <textarea id="input-text"></textarea>
-    </div>
+    <main>
+        <section class="description">
+            <p>This free online tool helps you clean up transcripts by removing line numbers and timestamps. It's perfect for formatting transcripts exported from Premiere Pro or other video editing software.</p>
+        </section>
 
-    <div class ="button-area">
-        <button id="format-button">Format Transcript</button>
-    </div>
+        <section class="instructions">
+            <h2>How to Use</h2>
+            <ol>
+                <li>Copy your transcript text (including line numbers and timestamps)</li>
+                <li>Paste it into the input box below</li>
+                <li>Click "Format Transcript"</li>
+                <li>Copy the cleaned text from the output box</li>
+            </ol>
+        </section>
 
-    <div>
-        <label for="output-text">Formatted Transcript:</label>
-        <textarea id="output-text" class="output-box" readonly></textarea>
-    </div>
+        <section class="example">
+            <h3>Example Input:</h3>
+            <pre>1 00:00:00.000 --> 00:00:02.000
+Hello and welcome to our video.
+
+2 00:00:02.000 --> 00:00:04.000
+Today we'll be discussing transcript formatting.
+
+3 00:00:04.000 --> 00:00:06.000
+This tool makes it easy to clean up your text.</pre>
+        </section>
+
+        <div>
+            <label for="input-text">Paste your transcript here:</label>
+            <textarea id="input-text" aria-label="Input transcript text"></textarea>
+        </div>
+
+        <div>
+            <button id="format-button">Format Transcript</button>
+        </div>
+
+        <div>
+            <label for="output-text">Formatted Transcript:</label>
+            <textarea id="output-text" class="output-box" readonly aria-label="Formatted transcript output"></textarea>
+        </div>
+    </main>
 
     <script>
         document.getElementById("format-button").addEventListener("click", async () => {
             const inputText = document.getElementById("input-text").value;
-            console.log("Button clicked!");  // Log to ensure the button is being clicked
-            
-            if (inputText.trim() === "") {
-                alert("Please enter a transcript to format.");
-                return;
-            }
-    
-            try {
-                const response = await fetch("https://transcript-formatter.onrender.com/format", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({ transcript: inputText })
-                });
-    
-                console.log("Response received:", response);  // Log the response status
-                if (response.ok) {
-                    const data = await response.json();
-                    document.getElementById("output-text").value = data.formatted_transcript;
-                } else {
-                    console.log("Error response:", response);  // Log the full error response
-                    alert("Error formatting transcript. Please try again.");
-                }
-            } catch (error) {
-                console.error("Request failed:", error);
-                alert("There was an error with the request. Please try again later.");
+
+            const response = await fetch("http://0.0.0.0:10000/format", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ transcript: inputText })
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                document.getElementById("output-text").value = data.formatted_transcript;
+            } else {
+                alert("Error formatting transcript. Please try again.");
             }
         });
     </script>
-<script>
-(function(itsva){
-var d = document,
-    s = d.createElement('script'),
-    l = d.scripts[d.scripts.length - 1];
-s.settings = itsva || {};
-s.src = "\/\/sepujaxe.com\/ctD.9S6aby2Y5\/lHS\/W_Qy9xNjjGIN1OMSjqUMwuOsSP0m2qMcj\/UzyIN_T\/EZwR";
-s.async = true;
-s.referrerPolicy = 'no-referrer-when-downgrade';
-l.parentNode.insertBefore(s, l);
-})({})
-</script>   
-<script>
-    (function(zqinb){
-    var d = document,
-        s = d.createElement('script'),
-        l = d.scripts[d.scripts.length - 1];
-    s.settings = zqinb || {};
-    s.src = "\/\/laphagrito.com\/bGXgVGs.dSGxlH0NYAWEcu\/TeMmV9XuaZKU\/l\/kMPVTuYeyANATfIV1TMtz\/UwtxNBjlIl1pMFj-UjzYNJgD";
-    s.async = true;
-    s.referrerPolicy = 'no-referrer-when-downgrade';
-    l.parentNode.insertBefore(s, l);
-    })({})
-    </script> 
 </body>
 </html>
